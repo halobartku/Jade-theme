@@ -95,7 +95,7 @@
 {%- endif -%}
 
 {%- capture image_column -%}
-	<div class="featured-products-with-banner__column featured-products-with-banner__column--big{% if is_mobile_outside_image_first or is_mobile_inside_image_first %} featured-products-with-banner__column--mobile-first{% endif %}">
+	<div class="featured-products-with-banner__column {% if products.count >= 3 %}featured-products-with-banner__column--small{% else %}featured-products-with-banner__column--big{% endif %}{% if is_mobile_outside_image_first or is_mobile_inside_image_first %} featured-products-with-banner__column--mobile-first{% endif %}">
 		<div class="featured-products-with-banner__image-wrapper">
 			{%- if image == blank -%}
 				{{- "image" | placeholder_svg_tag: "featured-products-with-banner__image" -}}
@@ -207,7 +207,7 @@
 
 {%- capture content_column -%}
 	{%- if content_position == 'outside' -%}
-		<div class="featured-products-with-banner__column featured-products-with-banner__column--big featured-products-with-banner__column--content">
+		<div class="featured-products-with-banner__column {% if products.count >= 3 %}featured-products-with-banner__column--small{% else %}featured-products-with-banner__column--big{% endif %} featured-products-with-banner__column--content">
 			{{- content -}}
 		</div>
 	{%- endif-%}
