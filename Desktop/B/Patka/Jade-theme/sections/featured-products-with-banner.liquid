@@ -247,7 +247,7 @@
 					{%- endif -%}
 				{%- endfor -%}
 			{%- elsif products != blank and products.count >= 3 -%}
-				{%- for product in products -%}
+				{%- for product in products limit:3 -%}
 					{%- if content_position == 'inside' -%}
 						{%- if image_position == 'left' and forloop.first -%}
 							{{ image_column }}
