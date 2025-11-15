@@ -58,12 +58,16 @@ const ProductsBundle = () => {
     const cards = [...section.querySelectorAll(selectors.card)];
     const hiddenInputs = [...section.querySelectorAll(selectors.hiddenInput)];
     const formErrors = [...section.querySelectorAll(selectors.formError)];
-    const enableButton = hiddenInputs.every((input) => input.value) && formErrors.every((error) => error.innerText !== window.themeCore.translations.get("products.product.sold_out"));
+    const enableButton = hiddenInputs.every((input) => input.value) && formErrors.every((error) => {
+      const errorText = error.innerText.trim();
+      return errorText === "" || errorText === window.themeCore.translations.get("products.product.pre_order");
+    });
     const isEveryPreorder = hiddenInputs.every((input) => input.value) && formErrors.every((error, index) => {
-      if (error.innerText === "") {
+      const errorText = error.innerText.trim();
+      if (errorText === "") {
         return cards[index].hasAttribute("data-preorder");
       }
-      return error.innerText === window.themeCore.translations.get("products.product.pre_order");
+      return errorText === window.themeCore.translations.get("products.product.pre_order");
     });
     button.disabled = !enableButton;
     if (isEveryPreorder) {
