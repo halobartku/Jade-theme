@@ -1,0 +1,18 @@
+{
+	"sections": {
+		"banner": {
+			"type": "banner",
+			"settings": {
+			}
+		},
+		"shipping-page-main": {
+			"type": "shipping-page-main",
+			"settings": {
+			}
+		}
+	},
+	"order": [
+		"banner",
+		"shipping-page-main"
+	]
+}

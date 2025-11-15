@@ -1,0 +1,87 @@
+{
+	"sections": {
+		"blog": {
+			"type": "blog-template",
+			"blocks": {
+				"article_block": {
+					"type": "article",
+					"settings": {}
+				}
+			},
+			"block_order": [
+				"article_block"
+			],
+			"settings": {
+				"paginate_by": 9,
+				"pagination_type": "pagination",
+				"lazy_load_button_type": "secondary",
+				"show_filter_by_tag": true,
+				"container_width": "inherit",
+				"offset_top_desktop": 24,
+				"offset_bottom_desktop": 80,
+				"offset_top_mobile": 30,
+				"offset_bottom_mobile": 70
+			}
+		},
+		"product-tabs": {
+			"type": "product-tabs",
+			"blocks": {
+				"product-tabs-tab-1": {
+					"type": "tab",
+					"settings": {
+						"heading": "Best sellers"
+					}
+				},
+				"product-tabs-tab-2": {
+					"type": "tab",
+					"settings": {
+						"heading": "New Arrivals"
+					}
+				},
+				"product-tabs-tab-3": {
+					"type": "tab",
+					"settings": {
+						"heading": "On sale"
+					}
+				}
+			},
+			"block_order": [
+				"product-tabs-tab-1",
+				"product-tabs-tab-2",
+				"product-tabs-tab-3"
+			],
+			"settings": {
+				"heading": "Trending Products",
+				"label": "",
+				"text": "",
+				"container_width": "inherit",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 80,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 70
+			}
+		},
+		"gallery": {
+			"type": "gallery",
+			"settings": {
+				"title": "Follow us for more inspiration",
+				"text": "Follow us",
+				"button_label": "Button label",
+				"button_style": "secondary-border",
+				"text_color": "#535353",
+				"background_color": "#fff6f4",
+				"overlay_color": "rgba(0,0,0,.2)",
+				"container_width": "inherit",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 100,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 70
+			}
+		}
+	},
+	"order": [
+		"blog",
+		"product-tabs",
+		"gallery"
+	]
+}

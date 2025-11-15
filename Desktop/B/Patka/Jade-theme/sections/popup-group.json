@@ -1,0 +1,13 @@
+{
+	"type": "custom.popup",
+	"name": "Popups group",
+	"sections": {
+		"cookie-bar": {
+			"type": "cookie-bar",
+			"settings": {}
+		}
+	},
+	"order": [
+		"cookie-bar"
+	]
+}
