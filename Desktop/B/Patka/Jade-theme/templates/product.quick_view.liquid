@@ -74,13 +74,13 @@
 
 							{%- case media.media_type -%}
 								{%- when 'image' -%}
-									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}">
+									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}" data-media-id="{{ media.id }}">
 										<div class="quick-view__image-wrapper {{ quick_view_image_fit }}" style="{{- styles -}}">
 											{% render 'quick-view-image', image: media, is_stacked: is_stacked %}
 										</div>
 									</div>
 								{%- when 'video' -%}
-									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}">
+									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}" data-media-id="{{ media.id }}">
 										<div class="quick-view__image-wrapper {{ quick_view_image_fit }}" style="{{- styles -}}">
 											<video
 												class="quick-view__image js-video"
@@ -102,7 +102,7 @@
 									</div>
 								{%- when 'external_video' -%}
 									{%- assign show_arrows_on_mobile = true -%}
-									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}">
+									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}" data-media-id="{{ media.id }}">
 										<div class="quick-view__image-wrapper {{ quick_view_image_fit }}" style="{{- styles -}}">
 												<div
 													class="quick-view__image js-video"
@@ -123,7 +123,7 @@
 									</div>
 								{%- when 'model' -%}
 									{%- assign show_arrows_on_mobile = true -%}
-									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}">
+									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}" data-media-id="{{ media.id }}">
 										<div class="quick-view__image-wrapper {{ quick_view_image_fit }}" style="{{- styles -}}">
 
 										{% render 'quick-view-image', image: media, is_stacked: is_stacked %}
