@@ -117,7 +117,7 @@
   .products-bundle .products-bundle__container {
     display: flex;
     gap: 16px;
-    align-items: center;
+    align-items: flex-start;
   }
   .products-bundle .products-bundle__row {
     width: 76.316%;
@@ -144,6 +144,11 @@
     text-align: start;
     margin-bottom: 0;
     order: 1;
+    padding-top: 16px;
+  }
+  .products-bundle .products-bundle__heading {
+    font-size: calc(var(--heading-font-size) * 2.75);
+    margin-bottom: 32px;
   }
 }
 @media (min-width: 1200px) {
