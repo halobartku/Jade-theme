@@ -3004,19 +3004,11 @@ const QuickView = () => {
     if (!currentVariant || !slider || !sliderEl) {
       return;
     }
-    const variantImageId = currentVariant.image_id;
-    if (!variantImageId) {
+    const featuredMedia = currentVariant.featured_media;
+    if (!featuredMedia) {
       return;
     }
-    const slides = sliderEl.querySelectorAll('[data-slide-index]');
-    let targetSlide = null;
-    for (const slide of slides) {
-      const variantImageIds = slide.getAttribute('data-variant-image-ids');
-      if (variantImageIds && variantImageIds.split(',').includes(String(variantImageId))) {
-        targetSlide = slide;
-        break;
-      }
-    }
+    const targetSlide = sliderEl.querySelector(`[data-media-id="${featuredMedia.id}"]`);
     if (!targetSlide) {
       return;
     }
