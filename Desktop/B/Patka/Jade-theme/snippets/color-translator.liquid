@@ -1,0 +1,73 @@
+{%- comment -%}
+  Snippet: Color Translator
+  Translates color names to Polish and provides color hex values
+{%- endcomment -%}
+
+{%- liquid
+  assign color_translations = "
+    Red|Czerwony,
+    Blue|Niebieski,
+    Black|Czarny,
+    White|Biały,
+    Green|Zielony,
+    Yellow|Żółty,
+    Orange|Pomarańczowy,
+    Pink|Różowy,
+    Purple|Fioletowy,
+    Brown|Brązowy,
+    Gray|Szary,
+    Grey|Szary,
+    Beige|Beż,
+    Navy|Granatowy,
+    Cream|Krem,
+    Gold|Złoty,
+    Silver|Srebrny,
+    Burgundy|Bordowy,
+    Teal|Turkusowy,
+    Coral|Koralowy,
+    Khaki|Khaki,
+    Olive|Oliwkowy,
+    Maroon|Kasztanowy,
+    Turquoise|Turkusowy,
+    Indigo|Indygo,
+    Violet|Fioletowy,
+    Magenta|Magenta,
+    Cyan|Cyjan,
+    Lime|Limonka,
+    Mint|Miętowy,
+    Peach|Brzoskwiniowy,
+    Salmon|Łososiowy,
+    Tan|Opalony,
+    Charcoal|Węglowy,
+    Ivory|Kość słoniowa,
+    Taupe|Taupe,
+    Rust|Rdzawy,
+    Mauve|Mauve,
+    Plum|Śliwkowy,
+    Sage|Szałwiowy,
+    Slate|Łupkowy,
+    Stone|Kamienny,
+    Ash|Popielaty,
+    Smoke|Dymny,
+    Fog|Mglisty,
+    Mist|Mgła,
+    Dusk|Zmierzch,
+    Dawn|Świt,
+    Sunset|Zachód słońca,
+    Sunrise|Wschód słońca
+  " | split: ","
+-%}
+
+{%- if color_name -%}
+  {%- assign color_lower = color_name | downcase -%}
+  {%- for translation in color_translations -%}
+    {%- assign parts = translation | split: "|" -%}
+    {%- assign english = parts[0] | downcase | strip -%}
+    {%- assign polish = parts[1] | strip -%}
+    {%- if english == color_lower -%}
+      {{- polish -}}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+

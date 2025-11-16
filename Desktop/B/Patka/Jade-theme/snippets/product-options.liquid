@@ -80,7 +80,8 @@
 									  data-swatch-name="{{ option.name }}"
 									  data-swatch-position="{{ option.position }}"
 								>
-									{{- option.selected_value -}}
+									{%- assign color_name = option.selected_value -%}
+									{%- render 'color-translator', color_name: color_name -%}
 								</span>
 							{% endif %}
 						</div>
