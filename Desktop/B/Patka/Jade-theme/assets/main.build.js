@@ -2918,8 +2918,14 @@ const QuickView = () => {
         }
       }
     }
-    if (!target || !target.hasAttribute("data-option")) {
-      return;
+    // Check if target has data-option, if not, try to find a parent or associated input with data-option
+    if (!target.hasAttribute("data-option")) {
+      const optionInput = target.closest("[data-option]");
+      if (optionInput) {
+        target = optionInput;
+      } else {
+        return;
+      }
     }
     if (target.tagName === "SELECT" && target.selectedOptions.length) {
       Array.from(target.options).find((option) => option.getAttribute("selected")).removeAttribute("selected");
