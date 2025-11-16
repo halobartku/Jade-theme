@@ -3001,10 +3001,11 @@ const QuickView = () => {
     swatchNameEl.textContent = optionName;
   }
   function updateImage() {
-    if (!currentVariant || !currentVariant.featured_media || !slider || !sliderEl) {
+    const variantImage = currentVariant?.featured_image || currentVariant?.image;
+    if (!currentVariant || !variantImage || !slider || !sliderEl) {
       return;
     }
-    const featuredImage = sliderEl.querySelector(`[data-img-id="${currentVariant.featured_media.id}"]`);
+    const featuredImage = sliderEl.querySelector(`[data-img-id="${variantImage.id}"]`);
     if (!featuredImage) {
       return;
     }
