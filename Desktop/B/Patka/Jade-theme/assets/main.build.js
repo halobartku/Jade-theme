@@ -2892,6 +2892,7 @@ const QuickView = () => {
     }
   }
   async function formChangeHandler(event) {
+    console.log("=== formChangeHandler called ===", event.target);
     const target = event.target;
     const currentForm = target.closest(selectors2.form);
     buttonContent.addToCard = buttonContent.addToCard || window.themeCore.translations.get("products.product.add_to_cart");
@@ -2899,6 +2900,7 @@ const QuickView = () => {
     buttonContent.soldOut = buttonContent.soldOut || window.themeCore.translations.get("products.product.sold_out");
     buttonContent.unavailable = buttonContent.unavailable || window.themeCore.translations.get("products.product.unavailable");
     if (!currentForm || !container) {
+      console.log("Early return: currentForm or container missing");
       return;
     }
     if (target.hasAttribute("data-quantity-input")) {
