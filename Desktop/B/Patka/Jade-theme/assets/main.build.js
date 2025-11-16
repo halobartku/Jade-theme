@@ -3001,18 +3001,40 @@ const QuickView = () => {
     swatchNameEl.textContent = optionName;
   }
   function updateImage() {
+    console.log("=== updateImage called ===");
+    console.log("currentVariant:", currentVariant);
+    console.log("currentVariant?.featured_media:", currentVariant?.featured_media);
+    console.log("slider:", !!slider);
+    console.log("sliderEl:", !!sliderEl);
+
     if (!currentVariant || !currentVariant.featured_media || !slider || !sliderEl) {
+      console.log("Early return - missing required data");
       return;
     }
+
     const swiperWrapper = sliderEl.querySelector(selectors2.swiperWrapper);
+    console.log("swiperWrapper found:", !!swiperWrapper);
+
     if (!swiperWrapper) {
+      console.log("No swiperWrapper found");
       return;
     }
+
+    console.log("Looking for slide with data-media-id:", currentVariant.featured_media.id);
+    const allSlides = swiperWrapper.querySelectorAll("[data-media-id]");
+    console.log("All available slides with data-media-id:", Array.from(allSlides).map(s => s.getAttribute("data-media-id")));
+
     const slideElement = swiperWrapper.querySelector(`[data-media-id="${currentVariant.featured_media.id}"]`);
+    console.log("slideElement found:", !!slideElement);
+
     if (!slideElement) {
+      console.log("No slide found with matching media-id");
       return;
     }
+
     const slideIndex = slideElement.getAttribute(attributes2.slideIndex);
+    console.log("slideIndex:", slideIndex);
+    console.log("Sliding to index:", slideIndex);
     slider.slideTo(parseInt(slideIndex, 10));
   }
   function updateButtons() {
