@@ -3019,30 +3019,58 @@ const QuickView = () => {
       return;
     }
 
-    // Try to get media ID from featured_media first, then fall back to featured_image
-    let mediaId = null;
-    if (currentVariant.featured_media && currentVariant.featured_media.id) {
-      mediaId = currentVariant.featured_media.id;
-      console.log("Using featured_media.id:", mediaId);
-    } else if (currentVariant.featured_image && currentVariant.featured_image.id) {
-      mediaId = currentVariant.featured_image.id;
-      console.log("Using featured_image.id:", mediaId);
+    // Get the variant's featured image URL
+    let variantImageUrl = null;
+    if (currentVariant.featured_image) {
+      // featured_image could be a string URL or an object with src property
+      if (typeof currentVariant.featured_image === 'string') {
+        variantImageUrl = currentVariant.featured_image;
+      } else if (currentVariant.featured_image.src) {
+        variantImageUrl = currentVariant.featured_image.src;
+      }
     }
 
-    console.log("Looking for slide with data-media-id:", mediaId);
-    const allSlides = swiperWrapper.querySelectorAll("[data-media-id]");
-    console.log("All available slides with data-media-id:", Array.from(allSlides).map(s => s.getAttribute("data-media-id")));
+    console.log("Variant featured_image:", currentVariant.featured_image);
+    console.log("variantImageUrl:", variantImageUrl);
 
-    if (!mediaId) {
-      console.log("No media ID found in variant");
+    if (!variantImageUrl) {
+      console.log("No featured_image found in variant");
       return;
     }
 
-    const slideElement = swiperWrapper.querySelector(`[data-media-id="${mediaId}"]`);
+    // Extract the image ID from the URL (e.g., /cdn/shop/products/image-123456789.jpg -> 123456789)
+    const urlMatch = variantImageUrl.match(/\/(\d+)\./);
+    const variantImageId = urlMatch ? urlMatch[1] : null;
+    console.log("variantImageId extracted from URL:", variantImageId);
+
+    // Try to find slide by data-image-src attribute (URL matching)
+    const allSlides = swiperWrapper.querySelectorAll("[data-image-src]");
+    console.log("All available slides with data-image-src:", Array.from(allSlides).map(s => s.getAttribute("data-image-src")));
+
+    let slideElement = null;
+
+    // First try to match by image URL
+    for (const slide of allSlides) {
+      const slideImageSrc = slide.getAttribute("data-image-src");
+      if (slideImageSrc && slideImageSrc.includes(variantImageId)) {
+        slideElement = slide.closest("[data-slide-index]");
+        console.log("Found slide by URL match");
+        break;
+      }
+    }
+
+    // Fallback: try to match by media ID
+    if (!slideElement && variantImageId) {
+      slideElement = swiperWrapper.querySelector(`[data-media-id="${variantImageId}"]`);
+      if (slideElement) {
+        console.log("Found slide by media ID match");
+      }
+    }
+
     console.log("slideElement found:", !!slideElement);
 
     if (!slideElement) {
-      console.log("No slide found with matching media-id");
+      console.log("No slide found with matching image");
       return;
     }
 
