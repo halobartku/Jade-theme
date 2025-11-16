@@ -3002,21 +3002,28 @@ const QuickView = () => {
   }
   function updateImage() {
     if (!currentVariant || !currentVariant.featured_media || !slider || !sliderEl) {
+      console.log("updateImage early return:", { currentVariant: !!currentVariant, featured_media: currentVariant?.featured_media, slider: !!slider, sliderEl: !!sliderEl });
       return;
     }
+    console.log("currentVariant.featured_media:", currentVariant.featured_media);
     const swiperWrapper = sliderEl.querySelector(selectors2.swiperWrapper);
     if (!swiperWrapper) {
+      console.log("swiperWrapper not found");
       return;
     }
     const featuredImage = swiperWrapper.querySelector(`[data-img-id="${currentVariant.featured_media.id}"]`);
     if (!featuredImage) {
+      console.log("featuredImage not found with id:", currentVariant.featured_media.id);
+      console.log("Available data-img-id values:", Array.from(swiperWrapper.querySelectorAll("[data-img-id]")).map(el => el.getAttribute("data-img-id")));
       return;
     }
     const slideElement = featuredImage.closest(`[data-slide-index]`);
     if (!slideElement) {
+      console.log("slideElement not found");
       return;
     }
     const slideIndex = slideElement.getAttribute(attributes2.slideIndex);
+    console.log("Sliding to index:", slideIndex);
     slider.slideTo(parseInt(slideIndex, 10));
   }
   function updateButtons() {
