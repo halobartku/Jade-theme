@@ -3004,12 +3004,20 @@ const QuickView = () => {
     if (!currentVariant || !currentVariant.featured_media || !slider || !sliderEl) {
       return;
     }
-    const featuredImage = sliderEl.querySelector(`[data-img-id="${currentVariant.featured_media.id}"]`);
+    const swiperWrapper = sliderEl.querySelector(selectors2.swiperWrapper);
+    if (!swiperWrapper) {
+      return;
+    }
+    const featuredImage = swiperWrapper.querySelector(`[data-img-id="${currentVariant.featured_media.id}"]`);
     if (!featuredImage) {
       return;
     }
-    const slideIndex = featuredImage.closest(`[data-slide-index]`).getAttribute(attributes2.slideIndex);
-    slider.slideTo(slideIndex);
+    const slideElement = featuredImage.closest(`[data-slide-index]`);
+    if (!slideElement) {
+      return;
+    }
+    const slideIndex = slideElement.getAttribute(attributes2.slideIndex);
+    slider.slideTo(parseInt(slideIndex, 10));
   }
   function updateButtons() {
     if (!formButton || !productLink) {
