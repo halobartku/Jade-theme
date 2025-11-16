@@ -3005,7 +3005,10 @@ const QuickView = () => {
     if (!currentVariant || !variantImage || !slider || !sliderEl) {
       return;
     }
-    const featuredImage = sliderEl.querySelector(`[data-img-id="${variantImage.id}"]`);
+    let featuredImage = sliderEl.querySelector(`[data-img-id="${variantImage.id}"]`);
+    if (!featuredImage) {
+      featuredImage = sliderEl.querySelector(`[data-variant-img-id="${variantImage.id}"]`);
+    }
     if (!featuredImage) {
       return;
     }
