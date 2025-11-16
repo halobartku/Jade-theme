@@ -3003,11 +3003,10 @@ const QuickView = () => {
   function updateImage() {
     console.log("=== updateImage called ===");
     console.log("currentVariant:", currentVariant);
-    console.log("currentVariant?.featured_media:", currentVariant?.featured_media);
     console.log("slider:", !!slider);
     console.log("sliderEl:", !!sliderEl);
 
-    if (!currentVariant || !currentVariant.featured_media || !slider || !sliderEl) {
+    if (!currentVariant || !slider || !sliderEl) {
       console.log("Early return - missing required data");
       return;
     }
@@ -3020,11 +3019,26 @@ const QuickView = () => {
       return;
     }
 
-    console.log("Looking for slide with data-media-id:", currentVariant.featured_media.id);
+    // Try to get media ID from featured_media first, then fall back to featured_image
+    let mediaId = null;
+    if (currentVariant.featured_media && currentVariant.featured_media.id) {
+      mediaId = currentVariant.featured_media.id;
+      console.log("Using featured_media.id:", mediaId);
+    } else if (currentVariant.featured_image && currentVariant.featured_image.id) {
+      mediaId = currentVariant.featured_image.id;
+      console.log("Using featured_image.id:", mediaId);
+    }
+
+    console.log("Looking for slide with data-media-id:", mediaId);
     const allSlides = swiperWrapper.querySelectorAll("[data-media-id]");
     console.log("All available slides with data-media-id:", Array.from(allSlides).map(s => s.getAttribute("data-media-id")));
 
-    const slideElement = swiperWrapper.querySelector(`[data-media-id="${currentVariant.featured_media.id}"]`);
+    if (!mediaId) {
+      console.log("No media ID found in variant");
+      return;
+    }
+
+    const slideElement = swiperWrapper.querySelector(`[data-media-id="${mediaId}"]`);
     console.log("slideElement found:", !!slideElement);
 
     if (!slideElement) {
