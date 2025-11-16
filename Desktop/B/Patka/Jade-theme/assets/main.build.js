@@ -2892,15 +2892,13 @@ const QuickView = () => {
     }
   }
   async function formChangeHandler(event) {
-    console.log("=== formChangeHandler called ===", event.target);
-    const target = event.target;
+    let target = event.target;
     const currentForm = target.closest(selectors2.form);
     buttonContent.addToCard = buttonContent.addToCard || window.themeCore.translations.get("products.product.add_to_cart");
     buttonContent.preOrder = buttonContent.preOrder || window.themeCore.translations.get("products.product.pre_order");
     buttonContent.soldOut = buttonContent.soldOut || window.themeCore.translations.get("products.product.sold_out");
     buttonContent.unavailable = buttonContent.unavailable || window.themeCore.translations.get("products.product.unavailable");
     if (!currentForm || !container) {
-      console.log("Early return: currentForm or container missing");
       return;
     }
     if (target.hasAttribute("data-quantity-input")) {
@@ -2909,6 +2907,16 @@ const QuickView = () => {
       updateVolumePricing(quantityVariantInCart2);
       updateQuantityRules();
       updateQuantityLabelCartCount(quantityVariantInCart2);
+    }
+    // If target is a label, find the associated input
+    if (target.tagName === "LABEL") {
+      const inputId = target.getAttribute("for");
+      if (inputId) {
+        const input = document.getElementById(inputId);
+        if (input && input.hasAttribute("data-option")) {
+          target = input;
+        }
+      }
     }
     if (!target || !target.hasAttribute("data-option")) {
       return;
