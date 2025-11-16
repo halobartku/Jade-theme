@@ -3002,33 +3002,21 @@ const QuickView = () => {
   }
   function updateImage() {
     console.log("=== updateImage called ===");
-    console.log("currentVariant:", JSON.stringify(currentVariant, null, 2));
-    console.log("slider:", !!slider);
+    console.log("currentVariant:", currentVariant);
     console.log("sliderEl:", !!sliderEl);
 
-    if (!currentVariant || !slider || !sliderEl) {
-      console.log("Early return - missing required data");
+    if (!currentVariant || !sliderEl) {
+      console.log("Early return: currentVariant or sliderEl missing");
       return;
     }
 
     const swiperWrapper = sliderEl.querySelector(selectors2.swiperWrapper);
-    console.log("swiperWrapper found:", !!swiperWrapper);
+    console.log("swiperWrapper:", !!swiperWrapper);
 
     if (!swiperWrapper) {
-      console.log("No swiperWrapper found");
+      console.log("Early return: swiperWrapper missing");
       return;
     }
-
-    // Log all slides and their attributes
-    const allSlides = swiperWrapper.querySelectorAll(".swiper-slide");
-    console.log("Total slides in slider:", allSlides.length);
-    console.log("All slides data:", Array.from(allSlides).map((s, i) => ({
-      index: i,
-      dataSlideIndex: s.getAttribute("data-slide-index"),
-      dataMediaId: s.getAttribute("data-media-id"),
-      dataImageSrc: s.querySelector("[data-image-src]")?.getAttribute("data-image-src"),
-      innerHTML: s.innerHTML.substring(0, 100)
-    })));
 
     // Get the variant's featured image
     let variantImageUrl = null;
@@ -3040,16 +3028,24 @@ const QuickView = () => {
       }
     }
 
-    console.log("Variant featured_image type:", typeof currentVariant.featured_image);
-    console.log("Variant featured_image:", currentVariant.featured_image);
     console.log("variantImageUrl:", variantImageUrl);
+    console.log("currentVariant.featured_image:", currentVariant.featured_image);
 
     if (!variantImageUrl) {
-      console.log("No featured_image found in variant");
+      console.log("Early return: no variantImageUrl");
       return;
     }
 
-    // Try to find the matching slide
+    // Find all slides
+    const allSlides = swiperWrapper.querySelectorAll(".swiper-slide");
+    console.log("Total slides:", allSlides.length);
+    console.log("All slides data:", Array.from(allSlides).map((s, i) => ({
+      index: i,
+      dataImageSrc: s.querySelector("[data-image-src]")?.getAttribute("data-image-src"),
+      dataMediaId: s.getAttribute("data-media-id"),
+      dataSlideIndex: s.getAttribute("data-slide-index")
+    })));
+
     let slideElement = null;
 
     // Strategy 1: Direct URL match
@@ -3079,14 +3075,20 @@ const QuickView = () => {
     console.log("slideElement found:", !!slideElement);
 
     if (!slideElement) {
-      console.log("No slide found with matching image");
+      console.log("Early return: no matching slide found");
       return;
     }
 
-    const slideIndex = slideElement.getAttribute(attributes2.slideIndex);
-    console.log("slideIndex:", slideIndex);
-    console.log("Sliding to index:", slideIndex);
-    slider.slideTo(parseInt(slideIndex, 10));
+    // If slider is initialized (carousel mode), use slideTo
+    if (slider && slider.slideTo) {
+      const slideIndex = slideElement.getAttribute(attributes2.slideIndex);
+      console.log("Using slider.slideTo with index:", slideIndex);
+      slider.slideTo(parseInt(slideIndex, 10));
+    } else {
+      // If no slider (stacked mode), scroll the image into view
+      console.log("Using scrollIntoView");
+      slideElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
   function updateButtons() {
     if (!formButton || !productLink) {
