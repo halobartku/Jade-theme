@@ -3002,7 +3002,7 @@ const QuickView = () => {
   }
   function updateImage() {
     console.log("=== updateImage called ===");
-    console.log("currentVariant:", currentVariant);
+    console.log("currentVariant:", JSON.stringify(currentVariant, null, 2));
     console.log("slider:", !!slider);
     console.log("sliderEl:", !!sliderEl);
 
@@ -3019,10 +3019,20 @@ const QuickView = () => {
       return;
     }
 
-    // Get the variant's featured image URL
+    // Log all slides and their attributes
+    const allSlides = swiperWrapper.querySelectorAll(".swiper-slide");
+    console.log("Total slides in slider:", allSlides.length);
+    console.log("All slides data:", Array.from(allSlides).map((s, i) => ({
+      index: i,
+      dataSlideIndex: s.getAttribute("data-slide-index"),
+      dataMediaId: s.getAttribute("data-media-id"),
+      dataImageSrc: s.querySelector("[data-image-src]")?.getAttribute("data-image-src"),
+      innerHTML: s.innerHTML.substring(0, 100)
+    })));
+
+    // Get the variant's featured image
     let variantImageUrl = null;
     if (currentVariant.featured_image) {
-      // featured_image could be a string URL or an object with src property
       if (typeof currentVariant.featured_image === 'string') {
         variantImageUrl = currentVariant.featured_image;
       } else if (currentVariant.featured_image.src) {
@@ -3030,6 +3040,7 @@ const QuickView = () => {
       }
     }
 
+    console.log("Variant featured_image type:", typeof currentVariant.featured_image);
     console.log("Variant featured_image:", currentVariant.featured_image);
     console.log("variantImageUrl:", variantImageUrl);
 
@@ -3038,32 +3049,30 @@ const QuickView = () => {
       return;
     }
 
-    // Extract the image ID from the URL (e.g., /cdn/shop/products/image-123456789.jpg -> 123456789)
-    const urlMatch = variantImageUrl.match(/\/(\d+)\./);
-    const variantImageId = urlMatch ? urlMatch[1] : null;
-    console.log("variantImageId extracted from URL:", variantImageId);
-
-    // Try to find slide by data-image-src attribute (URL matching)
-    const allSlides = swiperWrapper.querySelectorAll("[data-image-src]");
-    console.log("All available slides with data-image-src:", Array.from(allSlides).map(s => s.getAttribute("data-image-src")));
-
+    // Try to find the matching slide
     let slideElement = null;
 
-    // First try to match by image URL
+    // Strategy 1: Direct URL match
     for (const slide of allSlides) {
-      const slideImageSrc = slide.getAttribute("data-image-src");
-      if (slideImageSrc && slideImageSrc.includes(variantImageId)) {
-        slideElement = slide.closest("[data-slide-index]");
-        console.log("Found slide by URL match");
+      const slideImageSrc = slide.querySelector("[data-image-src]")?.getAttribute("data-image-src");
+      if (slideImageSrc && slideImageSrc === variantImageUrl) {
+        slideElement = slide;
+        console.log("Found slide by EXACT URL match");
         break;
       }
     }
 
-    // Fallback: try to match by media ID
-    if (!slideElement && variantImageId) {
-      slideElement = swiperWrapper.querySelector(`[data-media-id="${variantImageId}"]`);
-      if (slideElement) {
-        console.log("Found slide by media ID match");
+    // Strategy 2: Partial URL match (in case URLs are formatted differently)
+    if (!slideElement) {
+      const variantImageId = variantImageUrl.split('/').pop().split('.')[0];
+      console.log("Trying partial match with ID:", variantImageId);
+      for (const slide of allSlides) {
+        const slideImageSrc = slide.querySelector("[data-image-src]")?.getAttribute("data-image-src");
+        if (slideImageSrc && slideImageSrc.includes(variantImageId)) {
+          slideElement = slide;
+          console.log("Found slide by PARTIAL URL match");
+          break;
+        }
       }
     }
 
