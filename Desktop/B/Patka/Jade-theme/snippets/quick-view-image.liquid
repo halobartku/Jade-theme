@@ -44,7 +44,6 @@
 			src="{{ image | img_url: '10x' }}"
 			alt="{{- image.alt | escape -}}"
 			data-img-id="{{ image.id }}"
-			{% if image.preview_image %}data-variant-img-id="{{ image.preview_image.id }}"{% endif %}
 			width="472"
 			height="472"
 			{% if img_focal != blank %}
@@ -61,7 +60,6 @@
 				src="{{ image | img_url: '71x71', crop: 'center' }}"
 				alt="{{- image.alt | escape -}}"
 				data-img-id="{{ image.id }}"
-				{% if image.preview_image %}data-variant-img-id="{{ image.preview_image.id }}"{% endif %}
 				width="71"
 				height="71"
 				{% if img_focal != blank %}
@@ -105,7 +103,6 @@
 				src="{{ image | img_url: '480x' }}"
 				alt="{{- image.alt | escape -}}"
 				data-img-id="{{ image.id }}"
-				{% if image.preview_image %}data-variant-img-id="{{ image.preview_image.id }}"{% endif %}
 				width="342"
 				height="684"
 				{% if img_focal != blank %}

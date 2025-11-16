@@ -72,9 +72,19 @@
 								--aspect-ratio: {{- aspect_ratio -}}%;
 							{%- endcapture -%}
 
+							{%- assign variant_image_ids = "" -%}
+							{%- for variant in product.variants -%}
+								{%- if variant.featured_media.id == media.id -%}
+									{%- if variant_image_ids != "" -%}
+										{%- assign variant_image_ids = variant_image_ids | append: "," -%}
+									{%- endif -%}
+									{%- assign variant_image_ids = variant_image_ids | append: variant.image_id -%}
+								{%- endif -%}
+							{%- endfor -%}
+
 							{%- case media.media_type -%}
 								{%- when 'image' -%}
-									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}">
+									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}" {% if variant_image_ids != "" %}data-variant-image-ids="{{ variant_image_ids }}"{% endif %}>
 										<div class="quick-view__image-wrapper {{ quick_view_image_fit }}" style="{{- styles -}}">
 											{% render 'quick-view-image', image: media, is_stacked: is_stacked %}
 										</div>

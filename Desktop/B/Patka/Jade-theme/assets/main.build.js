@@ -3001,18 +3001,26 @@ const QuickView = () => {
     swatchNameEl.textContent = optionName;
   }
   function updateImage() {
-    const variantImage = currentVariant?.featured_image || currentVariant?.image;
-    if (!currentVariant || !variantImage || !slider || !sliderEl) {
+    if (!currentVariant || !slider || !sliderEl) {
       return;
     }
-    let featuredImage = sliderEl.querySelector(`[data-img-id="${variantImage.id}"]`);
-    if (!featuredImage) {
-      featuredImage = sliderEl.querySelector(`[data-variant-img-id="${variantImage.id}"]`);
-    }
-    if (!featuredImage) {
+    const variantImageId = currentVariant.image_id;
+    if (!variantImageId) {
       return;
     }
-    const slideIndex = featuredImage.closest(`[data-slide-index]`).getAttribute(attributes2.slideIndex);
+    const slides = sliderEl.querySelectorAll('[data-slide-index]');
+    let targetSlide = null;
+    for (const slide of slides) {
+      const variantImageIds = slide.getAttribute('data-variant-image-ids');
+      if (variantImageIds && variantImageIds.split(',').includes(String(variantImageId))) {
+        targetSlide = slide;
+        break;
+      }
+    }
+    if (!targetSlide) {
+      return;
+    }
+    const slideIndex = targetSlide.getAttribute('data-slide-index');
     slider.slideTo(slideIndex);
   }
   function updateButtons() {
