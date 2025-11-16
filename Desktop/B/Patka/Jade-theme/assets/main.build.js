@@ -3003,20 +3003,23 @@ const QuickView = () => {
     swatchNameEl.textContent = optionName;
   }
   function updateImage() {
-    console.log("=== updateImage called ===");
-    console.log("currentVariant:", currentVariant);
-    console.log("sliderEl:", !!sliderEl);
+    const logs = [];
+    logs.push("=== updateImage called ===");
+    logs.push("currentVariant: " + JSON.stringify(currentVariant));
+    logs.push("sliderEl: " + !!sliderEl);
 
     if (!currentVariant || !sliderEl) {
-      console.log("Early return: currentVariant or sliderEl missing");
+      logs.push("Early return: currentVariant or sliderEl missing");
+      localStorage.setItem("updateImageLogs", logs.join("\n"));
       return;
     }
 
     const swiperWrapper = sliderEl.querySelector(selectors2.swiperWrapper);
-    console.log("swiperWrapper:", !!swiperWrapper);
+    logs.push("swiperWrapper: " + !!swiperWrapper);
 
     if (!swiperWrapper) {
-      console.log("Early return: swiperWrapper missing");
+      logs.push("Early return: swiperWrapper missing");
+      localStorage.setItem("updateImageLogs", logs.join("\n"));
       return;
     }
 
@@ -3030,23 +3033,24 @@ const QuickView = () => {
       }
     }
 
-    console.log("variantImageUrl:", variantImageUrl);
-    console.log("currentVariant.featured_image:", currentVariant.featured_image);
+    logs.push("variantImageUrl: " + variantImageUrl);
+    logs.push("currentVariant.featured_image: " + JSON.stringify(currentVariant.featured_image));
 
     if (!variantImageUrl) {
-      console.log("Early return: no variantImageUrl");
+      logs.push("Early return: no variantImageUrl");
+      localStorage.setItem("updateImageLogs", logs.join("\n"));
       return;
     }
 
     // Find all slides
     const allSlides = swiperWrapper.querySelectorAll(".swiper-slide");
-    console.log("Total slides:", allSlides.length);
-    console.log("All slides data:", Array.from(allSlides).map((s, i) => ({
+    logs.push("Total slides: " + allSlides.length);
+    logs.push("All slides data: " + JSON.stringify(Array.from(allSlides).map((s, i) => ({
       index: i,
       dataImageSrc: s.querySelector("[data-image-src]")?.getAttribute("data-image-src"),
       dataMediaId: s.getAttribute("data-media-id"),
       dataSlideIndex: s.getAttribute("data-slide-index")
-    })));
+    }))));
 
     let slideElement = null;
 
@@ -3055,7 +3059,7 @@ const QuickView = () => {
       const slideImageSrc = slide.querySelector("[data-image-src]")?.getAttribute("data-image-src");
       if (slideImageSrc && slideImageSrc === variantImageUrl) {
         slideElement = slide;
-        console.log("Found slide by EXACT URL match");
+        logs.push("Found slide by EXACT URL match");
         break;
       }
     }
@@ -3063,34 +3067,37 @@ const QuickView = () => {
     // Strategy 2: Partial URL match (in case URLs are formatted differently)
     if (!slideElement) {
       const variantImageId = variantImageUrl.split('/').pop().split('.')[0];
-      console.log("Trying partial match with ID:", variantImageId);
+      logs.push("Trying partial match with ID: " + variantImageId);
       for (const slide of allSlides) {
         const slideImageSrc = slide.querySelector("[data-image-src]")?.getAttribute("data-image-src");
         if (slideImageSrc && slideImageSrc.includes(variantImageId)) {
           slideElement = slide;
-          console.log("Found slide by PARTIAL URL match");
+          logs.push("Found slide by PARTIAL URL match");
           break;
         }
       }
     }
 
-    console.log("slideElement found:", !!slideElement);
+    logs.push("slideElement found: " + !!slideElement);
 
     if (!slideElement) {
-      console.log("Early return: no matching slide found");
+      logs.push("Early return: no matching slide found");
+      localStorage.setItem("updateImageLogs", logs.join("\n"));
       return;
     }
 
     // If slider is initialized (carousel mode), use slideTo
     if (slider && slider.slideTo) {
       const slideIndex = slideElement.getAttribute(attributes2.slideIndex);
-      console.log("Using slider.slideTo with index:", slideIndex);
+      logs.push("Using slider.slideTo with index: " + slideIndex);
       slider.slideTo(parseInt(slideIndex, 10));
     } else {
       // If no slider (stacked mode), scroll the image into view
-      console.log("Using scrollIntoView");
+      logs.push("Using scrollIntoView");
       slideElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    localStorage.setItem("updateImageLogs", logs.join("\n"));
   }
   function updateButtons() {
     if (!formButton || !productLink) {
